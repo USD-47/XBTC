@@ -1,0 +1,429 @@
+import React, { useState, useEffect } from 'react';
+import { Globe, Shield, Zap, Target, Layers, PieChart, TrendingUp, Info, ChevronRight, Menu, X, FileText, Cpu, Layout } from 'lucide-react';
+
+const App = () => {
+  const [lang, setLang] = useState('az');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('intro');
+
+  const content = {
+    az: {
+      title: "XBTC WhitePaper",
+      subtitle: "Digital Scarcity Reimagined",
+      version: "Versiya: 1.0",
+      docType: "Rəsmi WhitePaper",
+      nav: [
+        { id: 'intro', label: 'Giriş' },
+        { id: 'vision', label: 'Vizyon' },
+        { id: 'mission', label: 'Missiya' },
+        { id: 'problem', label: 'Problem' },
+        { id: 'solution', label: 'Həll Yanaşması' },
+        { id: 'principles', label: 'Prinsiplər' },
+        { id: 'architecture', label: 'Texniki Arxitektura' },
+        { id: 'tokenomics', label: 'Tokenomika' },
+        { id: 'use-cases', label: 'İstifadə Sahələri' },
+        { id: 'roadmap', label: 'Yol Xəritəsi' },
+        { id: 'risks', label: 'Risklər' }
+      ],
+      sections: {
+        intro: {
+          title: "1. Giriş",
+          text: "Rəqəmsal maliyyə dünyası son onillikdə ciddi transformasiya yaşamışdır. Bu transformasiyanın mərkəzində isə mərkəzsizləşdirilmiş, sərhədsiz və məhdud təchizatlı aktiv anlayışı dayanır. Bitcoin bu anlayışın başlanğıcı olmuş, lakin zaman keçdikcə bazarın tələbləri daha çevik və ekosistem baxımından daha funksional strukturlara ehtiyac yaratmışdır. XBTC bu ehtiyacdan yaranan yeni nəsil rəqəmsal aktiv konsepsiyasıdır."
+        },
+        vision: {
+          title: "2. Vizyon",
+          text: "XBTC-nin vizyonu qlobal rəqəmsal iqtisadiyyatda etibarlı, məhdud, tanınan və uzunmüddətli bir rəqəmsal aktiv standardı yaratmaqdır.",
+          points: [
+            "Rəqəmsal qıtlıq prinsipinə əsaslanan güclü token modeli",
+            "İnvestorlar üçün uzunmüddətli etibar infrastrukturu",
+            "Funksional ekosistem vahidi",
+            "DeFi, Web3 və ödəniş modellərinə inteqrasiya",
+            "İnstitusional səviyyəli idarəetmə"
+          ]
+        },
+        mission: {
+          title: "3. Missiya",
+          text: "XBTC-nin missiyası Bitcoin dəyərlərini daşıyan, lakin müasir blokçeyn ekosistemlərinə daha rahat uyğunlaşan bir rəqəmsal aktiv təqdim etməkdir.",
+          pillars: [
+            { t: "Məhdud təklif", d: "Struktur olaraq qıtlıq prinsipini qoruyur." },
+            { t: "Faydalı istifadə", d: "Real məhsullarda və staking/DAO sistemlərində işləyir." },
+            { t: "Etibarlı infrastruktur", d: "Peşəkar standartlar üzərində qurulur." }
+          ]
+        },
+        tokenomics: {
+          title: "8. Tokenomika",
+          stats: [
+            { l: "Ticker", v: "XBTC" },
+            { l: "Maksimum Təklif", v: "21,000,000 XBTC" },
+            { l: "Decimal", v: "18" },
+            { l: "Kateqoriya", v: "Digital Store of Value" }
+          ],
+          distribution: [
+            { label: "İctimai ekosistem", value: "40%" },
+            { label: "Likvidlik fondu", value: "20%" },
+            { label: "Strateji ehtiyat", value: "15%" },
+            { label: "Komanda", value: "10%" },
+            { label: "Tərəfdaşlıq", value: "10%" },
+            { label: "Marketinq", value: "5%" }
+          ]
+        },
+        roadmap: {
+          title: "13. Yol Xəritəsi",
+          phases: [
+            { title: "Faza 1", items: ["XBTC Brendinqi", "WhitePaper", "Tokenomika planı"] },
+            { title: "Faza 2", items: ["Smart Contract yazılışı", "Testnet", "Audit hazırlığı"] },
+            { title: "Faza 3", items: ["Token Deployment", "Likvidlik təminatı", "Launch"] },
+            { title: "Faza 4", items: ["Staking Modulu", "Cross-chain bridge", "Ekosistem genişlənməsi"] }
+          ]
+        },
+        disclaimer: {
+          title: "Hüquqi qeyd",
+          text: "Bu sənəd investisiya tövsiyəsi deyil. WhitePaper məlumatlandırma məqsədi daşıyır. İstənilən iqtisadi qərar şəxsi araşdırma əsasında verilməlidir."
+        }
+      }
+    },
+    en: {
+      title: "XBTC WhitePaper",
+      subtitle: "Digital Scarcity Reimagined",
+      version: "Version: 1.0",
+      docType: "Official WhitePaper",
+      nav: [
+        { id: 'intro', label: 'Introduction' },
+        { id: 'vision', label: 'Vision' },
+        { id: 'mission', label: 'Mission' },
+        { id: 'problem', label: 'Problem' },
+        { id: 'solution', label: 'Solution Approach' },
+        { id: 'principles', label: 'Principles' },
+        { id: 'architecture', label: 'Technical Architecture' },
+        { id: 'tokenomics', label: 'Tokenomics' },
+        { id: 'use-cases', label: 'Use Cases' },
+        { id: 'roadmap', label: 'Roadmap' },
+        { id: 'risks', label: 'Risks' }
+      ],
+      sections: {
+        intro: {
+          title: "1. Introduction",
+          text: "The digital finance world has undergone a major transformation over the last decade. At the heart of this transformation lies the concept of a decentralized, borderless, and limited-supply asset. Bitcoin was the start, but over time market demands created a need for more flexible and functional structures. XBTC is a next-generation digital asset concept born from this need."
+        },
+        vision: {
+          title: "2. Vision",
+          text: "XBTC's vision is to create a reliable, limited, recognized, and long-term digital asset standard in the global digital economy.",
+          points: [
+            "Strong token model based on digital scarcity",
+            "Long-term trust infrastructure for investors",
+            "Functional ecosystem unit",
+            "Integration with DeFi, Web3, and payment models",
+            "Institutional-level governance"
+          ]
+        },
+        mission: {
+          title: "3. Mission",
+          text: "XBTC's mission is to provide a digital asset that carries Bitcoin values but adapts more easily to modern blockchain ecosystems.",
+          pillars: [
+            { t: "Limited Supply", d: "Structurally protects the principle of scarcity." },
+            { t: "Utility Use", d: "Works in real products, staking, and DAO systems." },
+            { t: "Trusted Infrastructure", d: "Built on professional technical standards." }
+          ]
+        },
+        tokenomics: {
+          title: "8. Tokenomics",
+          stats: [
+            { l: "Ticker", v: "XBTC" },
+            { l: "Max Supply", v: "21,000,000 XBTC" },
+            { l: "Decimal", v: "18" },
+            { l: "Category", v: "Digital Store of Value" }
+          ],
+          distribution: [
+            { label: "Public Ecosystem", value: "40%" },
+            { label: "Liquidity Fund", value: "20%" },
+            { label: "Strategic Reserve", value: "15%" },
+            { label: "Team", value: "10%" },
+            { label: "Partnerships", value: "10%" },
+            { label: "Marketing", value: "5%" }
+          ]
+        },
+        roadmap: {
+          title: "13. Roadmap",
+          phases: [
+            { title: "Phase 1", items: ["XBTC Branding", "WhitePaper", "Tokenomics finalization"] },
+            { title: "Phase 2", items: ["Smart Contract development", "Testnet", "Audit prep"] },
+            { title: "Phase 3", items: ["Token Deployment", "Liquidity Provision", "Launch"] },
+            { title: "Phase 4", items: ["Staking Module", "Cross-chain bridge", "Ecosystem expansion"] }
+          ]
+        },
+        disclaimer: {
+          title: "Legal Disclaimer",
+          text: "This document is not investment advice. The WhitePaper is for informational purposes only. Any financial decisions should be based on personal research."
+        }
+      }
+    }
+  };
+
+  const current = content[lang];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0b] text-gray-200 font-sans selection:bg-orange-500/30 selection:text-orange-400">
+      {/* Background Decor */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-orange-600/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full" />
+      </div>
+
+      {/* Header */}
+      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-black/40 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-tr from-orange-500 to-amber-300 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
+              <span className="font-bold text-black text-xl italic">X</span>
+            </div>
+            <span className="text-2xl font-bold tracking-tighter text-white">XBTC</span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8">
+            <nav className="flex items-center gap-6">
+              {current.nav.slice(0, 4).map(item => (
+                <button 
+                  key={item.id}
+                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
+                  className="text-sm font-medium hover:text-orange-400 transition-colors uppercase tracking-widest opacity-70 hover:opacity-100"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+            <div className="h-6 w-px bg-white/10" />
+            <div className="flex bg-white/5 rounded-full p-1 border border-white/10">
+              <button 
+                onClick={() => setLang('az')}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${lang === 'az' ? 'bg-orange-500 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+              >
+                AZ
+              </button>
+              <button 
+                onClick={() => setLang('en')}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${lang === 'en' ? 'bg-orange-500 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
+              >
+                EN
+              </button>
+            </div>
+          </div>
+
+          <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-black/95 pt-24 px-6 md:hidden">
+          <div className="flex flex-col gap-6">
+            {current.nav.map(item => (
+              <button 
+                key={item.id}
+                onClick={() => {
+                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                  setIsMenuOpen(false);
+                }}
+                className="text-2xl font-bold text-left"
+              >
+                {item.label}
+              </button>
+            ))}
+            <div className="flex gap-4 mt-8">
+              <button onClick={() => setLang('az')} className="px-6 py-2 bg-white/10 rounded-lg">AZ</button>
+              <button onClick={() => setLang('en')} className="px-6 py-2 bg-white/10 rounded-lg">EN</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hero Section */}
+      <section id="intro" className="relative pt-44 pb-32 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-semibold mb-8 animate-pulse">
+            <Zap size={14} /> {current.docType}
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight mb-6 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+            {current.title}
+          </h1>
+          <p className="text-xl md:text-2xl text-orange-400/80 font-medium mb-12 tracking-wide">
+            {current.subtitle}
+          </p>
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500 uppercase tracking-[0.2em] font-bold">
+            <span>{current.version}</span>
+            <span className="hidden md:inline">•</span>
+            <span>{lang === 'az' ? 'Dil: Azərbaycan' : 'Language: English'}</span>
+            <span className="hidden md:inline">•</span>
+            <span>XBTC Project</span>
+          </div>
+        </div>
+      </section>
+
+      <main className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 pb-40">
+        
+        {/* Sidebar Nav */}
+        <aside className="hidden lg:block lg:col-span-3 sticky top-32 h-fit">
+          <div className="space-y-1">
+            {current.nav.map(item => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                  setActiveSection(item.id);
+                }}
+                className={`w-full text-left px-4 py-3 rounded-lg text-sm font-semibold transition-all border-l-2 ${activeSection === item.id ? 'bg-orange-500/10 border-orange-500 text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        {/* Content Area */}
+        <div className="lg:col-span-9 space-y-32">
+          
+          {/* Introduction */}
+          <section id="intro" className="scroll-mt-32">
+            <div className="flex items-center gap-4 mb-8">
+               <FileText className="text-orange-500" size={32} />
+               <h2 className="text-4xl font-bold text-white tracking-tight">{current.sections.intro.title}</h2>
+            </div>
+            <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/5 leading-relaxed text-gray-400 text-lg">
+              {current.sections.intro.text}
+            </div>
+          </section>
+
+          {/* Vision */}
+          <section id="vision" className="scroll-mt-32">
+            <div className="flex items-center gap-4 mb-8">
+               <Target className="text-orange-500" size={32} />
+               <h2 className="text-4xl font-bold text-white tracking-tight">{current.sections.vision.title}</h2>
+            </div>
+            <p className="text-xl text-gray-300 mb-8 font-medium">{current.sections.vision.text}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {current.sections.vision.points.map((point, idx) => (
+                <div key={idx} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/10 group hover:border-orange-500/50 transition-all">
+                  <div className="w-2 h-2 rounded-full bg-orange-500 group-hover:scale-150 transition-transform" />
+                  <span className="text-gray-300 font-medium">{point}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Mission */}
+          <section id="mission" className="scroll-mt-32">
+            <div className="flex items-center gap-4 mb-8">
+               <Shield className="text-orange-500" size={32} />
+               <h2 className="text-4xl font-bold text-white tracking-tight">{current.sections.mission.title}</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {current.sections.mission.pillars.map((pillar, idx) => (
+                <div key={idx} className="p-8 rounded-3xl bg-gradient-to-br from-white/[0.05] to-transparent border border-white/5">
+                  <h3 className="text-orange-500 font-bold text-xl mb-4">{pillar.t}</h3>
+                  <p className="text-gray-400 leading-relaxed">{pillar.d}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Tokenomics */}
+          <section id="tokenomics" className="scroll-mt-32">
+            <div className="flex items-center gap-4 mb-8">
+               <PieChart className="text-orange-500" size={32} />
+               <h2 className="text-4xl font-bold text-white tracking-tight">{current.sections.tokenomics.title}</h2>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+              {current.sections.tokenomics.stats.map((stat, idx) => (
+                <div key={idx} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                  <div className="text-xs text-gray-500 font-black uppercase tracking-widest mb-2">{stat.l}</div>
+                  <div className="text-xl font-bold text-white">{stat.v}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/5">
+              <h3 className="text-xl font-bold text-white mb-8">{lang === 'az' ? 'Təklifin bölüşdürülməsi' : 'Supply Distribution'}</h3>
+              <div className="space-y-6">
+                {current.sections.tokenomics.distribution.map((item, idx) => (
+                  <div key={idx}>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-400">{item.label}</span>
+                      <span className="text-sm font-bold text-orange-500">{item.value}</span>
+                    </div>
+                    <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-orange-600 to-orange-400" 
+                        style={{ width: item.value }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Roadmap */}
+          <section id="roadmap" className="scroll-mt-32">
+            <div className="flex items-center gap-4 mb-8">
+               <TrendingUp className="text-orange-500" size={32} />
+               <h2 className="text-4xl font-bold text-white tracking-tight">{current.sections.roadmap.title}</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {current.sections.roadmap.phases.map((phase, idx) => (
+                <div key={idx} className="relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all">
+                  <div className="absolute top-0 right-0 p-6 opacity-10">
+                    <span className="text-6xl font-black italic">{idx + 1}</span>
+                  </div>
+                  <h3 className="text-2xl font-black text-white mb-6 uppercase tracking-tighter italic">{phase.title}</h3>
+                  <ul className="space-y-4">
+                    {phase.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-gray-400">
+                        <ChevronRight size={18} className="text-orange-500 mt-0.5 shrink-0" />
+                        <span className="font-medium">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Legal */}
+          <section id="risks" className="scroll-mt-32">
+            <div className="p-10 rounded-3xl bg-red-950/10 border border-red-500/20">
+              <div className="flex items-center gap-4 mb-6">
+                <Info className="text-red-500" size={28} />
+                <h2 className="text-2xl font-bold text-white">{current.sections.disclaimer.title}</h2>
+              </div>
+              <p className="text-gray-400 leading-relaxed italic">
+                {current.sections.disclaimer.text}
+              </p>
+            </div>
+          </section>
+
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 bg-black/50 py-20">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+              <span className="font-bold text-black italic">X</span>
+            </div>
+            <span className="text-xl font-bold tracking-tighter text-white">XBTC</span>
+          </div>
+          <p className="text-gray-500 text-sm mb-4">© 2024 XBTC Ecosystem. All rights reserved.</p>
+          <p className="text-orange-500 font-bold italic tracking-widest text-xs uppercase">
+            {lang === 'az' ? 'Rəqəmsal Qıtlıq Yenidən Təsəvvür Edildi' : 'Digital Scarcity Reimagined'}
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
+
